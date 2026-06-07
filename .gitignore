@@ -1,0 +1,22 @@
+# deps
+node_modules
+.pnp
+.pnp.js
+
+# build
+dist
+.next
+out
+build
+.turbo
+
+# env
+.env
+.env.local
+.env.*.local
+
+# misc
+.DS_Store
+*.pem
+coverage
+*.log

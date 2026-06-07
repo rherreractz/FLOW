@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id          String        @id @default(cuid())
+  slug        String        @unique
+  name        String
+  plan        Plan          @default(STARTER)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  config      TenantConfig?
+  leads       Lead[]
+  automations Automation[]
+  users       TenantUser[]
+  @@map("tenants")
+}
+
+model TenantConfig {
+  id              String  @id @default(cuid())
+  tenantId        String  @unique
+  tenant          Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  primaryColor    String  @default("#7F77DD")
+  accentColor     String  @default("#1D9E75")
+  backgroundColor String  @default("#FFFFFF")
+  fontHeading     String  @default("Inter")
+  fontBody        String  @default("Inter")
+  logoUrl         String?
+  customDomain    String? @unique
+  metaTitle       String?
+  metaDescription String?
+  @@map("tenant_configs")
+}
+
+model Lead {
+  id         String     @id @default(cuid())
+  tenantId   String
+  tenant     Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  name       String
+  phone      String?
+  email      String?
+  source     LeadSource @default(LANDING)
+  status     LeadStatus @default(RAW)
+  score      Int        @default(0)
+  rawMessage String?
+  metadata   Json       @default("{}")
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  events     LeadEvent[]
+  @@index([tenantId, status])
+  @@index([tenantId, createdAt])
+  @@map("leads")
+}
+
+model LeadEvent {
+  id        String   @id @default(cuid())
+  leadId    String
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  type      String
+  payload   Json     @default("{}")
+  createdAt DateTime @default(now())
+  @@index([leadId])
+  @@map("lead_events")
+}
+
+model Automation {
+  id        String            @id @default(cuid())
+  tenantId  String
+  tenant    Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  trigger   AutomationTrigger
+  name      String
+  active    Boolean           @default(true)
+  config    Json              @default("{}")
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  @@index([tenantId, trigger])
+  @@map("automations")
+}
+
+model TenantUser {
+  id        String   @id @default(cuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  email     String
+  role      UserRole @default(MEMBER)
+  createdAt DateTime @default(now())
+  @@unique([tenantId, email])
+  @@map("tenant_users")
+}
+
+enum Plan              { STARTER PRO ENTERPRISE }
+enum LeadStatus        { RAW QUALIFIED FALSE_NEGATIVE CONTACTED CONVERTED LOST }
+enum LeadSource        { LANDING WHATSAPP INSTAGRAM FACEBOOK MANUAL }
+enum AutomationTrigger { NEW_LEAD LEAD_QUALIFIED LEAD_CONVERTED NO_RESPONSE_48H }
+enum UserRole          { OWNER ADMIN MEMBER }
