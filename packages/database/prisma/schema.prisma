@@ -93,8 +93,38 @@ model TenantUser {
   @@map("tenant_users")
 }
 
-enum Plan              { STARTER PRO ENTERPRISE }
-enum LeadStatus        { RAW QUALIFIED FALSE_NEGATIVE CONTACTED CONVERTED LOST }
-enum LeadSource        { LANDING WHATSAPP INSTAGRAM FACEBOOK MANUAL }
-enum AutomationTrigger { NEW_LEAD LEAD_QUALIFIED LEAD_CONVERTED NO_RESPONSE_48H }
-enum UserRole          { OWNER ADMIN MEMBER }
+enum Plan {
+  STARTER
+  PRO
+  ENTERPRISE
+}
+
+enum LeadStatus {
+  RAW
+  QUALIFIED
+  FALSE_NEGATIVE
+  CONTACTED
+  CONVERTED
+  LOST
+}
+
+enum LeadSource {
+  LANDING
+  WHATSAPP
+  INSTAGRAM
+  FACEBOOK
+  MANUAL
+}
+
+enum AutomationTrigger {
+  NEW_LEAD
+  LEAD_QUALIFIED
+  LEAD_CONVERTED
+  NO_RESPONSE_48H
+}
+
+enum UserRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
