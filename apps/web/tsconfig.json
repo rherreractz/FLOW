@@ -1,18 +1,22 @@
 {
   "extends": "../../packages/config/typescript/nextjs.json",
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
   "compilerOptions": {
     "allowJs": true,
     "noEmit": true,
     "incremental": true,
-    "esModuleInterop": true
-  }
+    "esModuleInterop": true,
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "include": ["src", 
+  "next-env.d.ts", 
+  "**/*.ts", "**/*.tsx", 
+  ".next/types/**/*.ts"],
+
+  "exclude": [
+    "node_modules"
+  ],
 }

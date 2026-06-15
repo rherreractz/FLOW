@@ -6,7 +6,8 @@ import { LandingPage } from '@/components/LandingPage'
 interface Props { params: { tenant: string } }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const config = await getTenantConfig(params.tenant)
+  const { tenant } = await params  
+  const config = await getTenantConfig(tenant)
   if (!config) return { title: 'AgendaFlow' }
   return {
     title: config.metaTitle ?? config.tenant.name,
@@ -15,7 +16,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function TenantLandingPage({ params }: Props) {
-  const config = await getTenantConfig(params.tenant)
+  const { tenant } = await params 
+  const config = await getTenantConfig(tenant)
   if (!config) notFound()
   return (
     <main
@@ -25,7 +27,7 @@ export default async function TenantLandingPage({ params }: Props) {
         '--brand-bg':      config.backgroundColor,
       } as React.CSSProperties}
     >
-      <LandingPage tenantSlug={params.tenant} tenantName={config.tenant.name} config={config} />
+      <LandingPage tenantSlug={tenant} tenantName={config.tenant.name} config={config} />
     </main>
   )
 }

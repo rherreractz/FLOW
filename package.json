@@ -9,7 +9,9 @@
     "db:generate": "turbo db:generate",
     "db:migrate": "turbo db:migrate",
     "db:studio": "turbo db:studio",
-    "format": "prettier --write \"**/*.{ts,tsx,md,json}\" --ignore-path .gitignore"
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\" --ignore-path .gitignore",
+    "db:seed": "turbo db:seed"
+
   },
   "devDependencies": {
     "turbo": "^2.9.16",
@@ -22,4 +24,5 @@
     "pnpm": ">=9.0.0"
   },
   "packageManager": "pnpm@9.12.0"
+  
 }
